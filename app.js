@@ -9,11 +9,13 @@ app.use((request, response, next) => {
     response.header('Acess-Control-Allow-Methods', 'GET')
     app.use(cors())
 
-    next;
+    next();
 })
 
+const controllerFilmes = require('./controller/controller_filmes.js');
 
-app.get('/filmesAcme/filmes', cors(), async function(request,response,next){
+
+app.get('/v1/filmesAcme/filmes', cors(), async function(request,response,next){
     
     let filme = require ('./controller/functions');
     let filmes = filme.filmes();
@@ -23,8 +25,7 @@ app.get('/filmesAcme/filmes', cors(), async function(request,response,next){
 
 })
 
-
-app.get('/filmesAcme/filme/id:', cors(), async function(request, response, next){
+app.get('/v1/filmesAcme/filme/id:', cors(), async function(request, response, next){
 
     let mostrarFilme = request.params.id
     let filme = require ('./controller/functions');
@@ -34,7 +35,20 @@ app.get('/filmesAcme/filme/id:', cors(), async function(request, response, next)
     response.status(200)
 })
 
+app.get('/v2/filmesAcme/filme/filmes', cors(), async function(request, response, next){
+
+    let dadosFilmes = await controllerFilmes.getListarFilmes();
+
+    if(dadosFilmes){
+        response.json(dadosFilmes)
+        response.status(200);
+    }else {
+        response.json({message: 'Nenhum registro econtrado'})
+        response.status(404);
+    }
+})
+
 
 app.listen('8080', function(){
-    console.log('API EXECUTADA COM ÊXITO')
+    console.log('API EXECUTADA COM ÊXITOsssssssssssss')
 })
